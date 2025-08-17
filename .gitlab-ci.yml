@@ -1,0 +1,15 @@
+stages:
+  - build
+  - test
+  - security
+  - package
+  - deploy
+
+build:
+  stage: build
+  image: node:20
+  script:
+    - npm install
+  artifacts:
+    paths:
+      - node_modules/
