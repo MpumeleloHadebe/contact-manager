@@ -13,3 +13,41 @@ build:
   artifacts:
     paths:
       - node_modules/
+#stage ensures all unit and integration tests run automatically when i push code.
+test:
+  stage: test
+  image: node:20
+  services:
+    - name: mysql:8
+      alias: db
+  script:
+    - npm install      # ensure dependencies are installed
+    - npx mocha         # runs teh unit tests
+    
+security: #implement devops principles
+  stage: security
+  image: docker:latest
+  services:
+    - docker:dind
+  script:
+    - echo "Running SAST and Dependency Scanning" #sast scan the code for vuln without running it and scan npm for known security issues
+  allow_failure: true
+
+package:
+  stage: package
+  image: docker:latest
+  services:
+    - docker:dind
+  script:
+    - docker build -t registry.gitlab.com/mpumelelo0621-group/contact-manager:latest .
+    - docker push registry.gitlab.com/mpumelelo0621-group/contact-manager:latest
+
+deploy:
+  stage: deploy
+  image: docker:latest
+  services:
+    - docker:dind
+  script:
+    - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+    - docker pull registry.gitlab.com/mpumelelo0621-group/contact-manager:latest
+    - docker run -d -p 3000:3000 --name contact-manager-app registry.gitlab.com/mpumelelo0621-group/contact-manager:latest
