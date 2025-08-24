@@ -39,7 +39,7 @@ jobs:
           node-version: 20
       - run: npm install
       - name: Run tests
-        run: npx --no-install mocha
+        run: npm test
 
   security_scan:
     runs-on: ubuntu-latest
