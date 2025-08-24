@@ -38,8 +38,10 @@ jobs:
         with:
           node-version: 20
       - run: npm install
+      - name: Make Mocha executable
+        run: chmod +x ./node_modules/.bin/mocha
       - name: Run tests
-        run: npm test
+        run: npx --no-install mocha
 
   security_scan:
     runs-on: ubuntu-latest
