@@ -14,12 +14,12 @@ jobs:
         with:
           node-version: 20
       - name: Install dependencies
-      - run: npm install
+        run: npm install
 
   test:
     runs-on: ubuntu-latest
     services:
-      mysql: #db
+      mysql:
         image: mysql:8
         env:
           MYSQL_ROOT_PASSWORD: password123
@@ -27,7 +27,7 @@ jobs:
         ports:
           - 3306:3306
         options: >-
-          --health-cmd="mysqladmin ping -h localhost -u root -ppassword123" 
+          --health-cmd="mysqladmin ping -h localhost -u root -ppassword123"
           --health-interval=10s
           --health-timeout=5s
           --health-retries=5
@@ -40,23 +40,22 @@ jobs:
       - run: npm install
       - name: Run tests
         run: npx --no-install mocha
-        
-        
-    security_scan:
-       runs-on: ubuntu-latest
-       steps:
+
+  security_scan:
+    runs-on: ubuntu-latest
+    steps:
       - uses: actions/checkout@v3
       - name: Run security scans
         run: |
           echo "SAST scan simulated"
           npm audit --audit-level=high || true
 
-    package:
-        runs-on: ubuntu-latest
-        steps:
-          - uses: actions/checkout@v3
-          - name: Build Docker image
-            run: docker build -t contact-manager-app:latest .
+  package:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Build Docker image
+        run: docker build -t contact-manager-app:latest .
 
   deploy:
     runs-on: ubuntu-latest
