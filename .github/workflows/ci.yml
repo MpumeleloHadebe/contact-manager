@@ -32,11 +32,11 @@ jobs:
           --health-timeout=5s
           --health-retries=5
     env:
-       DB_HOST: localhost  # Override for CI environment
-       DB_USER: root
-       DB_PASSWORD: password123
-       DB_NAME: contact_manager
-       DB_PORT: 3306
+      DB_HOST: localhost  # Override for CI environment
+      DB_USER: root
+      DB_PASSWORD: password123
+      DB_NAME: contact_manager
+      DB_PORT: 3306
     steps:
       - uses: actions/checkout@v3
       - name: Set up Node.js
@@ -46,7 +46,7 @@ jobs:
       - run: npm install
       - name: Wait for MySQL to be ready
         run: |
-           for i in {1..30}; do
+          for i in {1..30}; do
             if mysqladmin ping -h localhost -u root -ppassword123 --silent; then
               echo "MySQL is ready!"
               break
