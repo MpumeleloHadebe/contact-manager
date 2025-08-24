@@ -44,6 +44,8 @@ jobs:
         with:
           node-version: 20
       - run: npm install
+      - name: Make Mocha executable
+        run: chmod +x ./node_modules/.bin/mocha  
       - name: Wait for MySQL to be ready
         run: |
           for i in {1..30}; do
