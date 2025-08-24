@@ -66,11 +66,11 @@ jobs:
             phone VARCHAR(20),
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
           );
-           
-         INSERT INTO contacts (name, email, phone) VALUES
-         ('John Doe', 'john@example.com', '123-456-7890'),
-         ('Jane Smith', 'jane@example.com', '098-765-4321');
-         EOF
+          
+          INSERT INTO contacts (name, email, phone) VALUES
+          ('John Doe', 'john@example.com', '123-456-7890'),
+          ('Jane Smith', 'jane@example.com', '098-765-4321');
+          EOF
       - name: Run tests
         run: npx --no-install mocha
 
