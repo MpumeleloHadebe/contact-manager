@@ -31,6 +31,12 @@ jobs:
           --health-interval=10s
           --health-timeout=5s
           --health-retries=5
+    env:
+       DB_HOST: localhost  # Override for CI environment
+       DB_USER: root
+       DB_PASSWORD: password123
+       DB_NAME: contact_manager
+       DB_PORT: 3306
     steps:
       - uses: actions/checkout@v3
       - name: Set up Node.js
@@ -38,8 +44,16 @@ jobs:
         with:
           node-version: 20
       - run: npm install
-      - name: Make Mocha executable
-        run: chmod +x ./node_modules/.bin/mocha
+      - name: Wait for MySQL to be ready
+        run: |
+           for i in {1..30}; do
+            if mysqladmin ping -h localhost -u root -ppassword123 --silent; then
+              echo "MySQL is ready!"
+              break
+            fi
+            echo "Waiting for MySQL... Attempt $i"
+            sleep 2
+          done
       - name: Run tests
         run: npx --no-install mocha
 
